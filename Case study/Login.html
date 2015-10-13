@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Login</title>
+
+<link rel="styleSheet" href="LoginStyle.css" type="text/css">
+</head>
+<body>
+	<div id="wrapper">
+		<h1>Login</h1>
+		<form id="loginForm" action="#">
+			<table>
+				<tr>
+					<td>Email</td>
+					<td><input type="email" id="email" class="input"
+						required="required" /></td>
+				</tr>
+				<tr>
+					<td>Password</td>
+					<td><input type="password" id="password" class="input"
+						required="required" /></td>
+				<tr id="error">
+				</tr>
+			</table>
+			<button onclick="return validate();">Login</button>
+		</form>
+	</div>
+</body>
+<script type="text/javascript" src="Script.js"></script>
+</html>

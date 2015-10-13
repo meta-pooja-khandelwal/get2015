@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Edit Car</title>
+<link rel="styleSheet" type="text/css" href="EditCarStyle.css">
+</head>
+
+<body onLoad="setValues()">
+	<div class="wrapper">
+
+		<header>
+			<img src="./logo.png" alt="car dekho logo" width="400px"
+				height="100px" align="left"> <input type="button"
+				onclick="location.href='VehicleHome.html';" value="Home" id="home" />
+			<input type="button" onclick="location.href='Vehicle.html';"
+				value="Log out" id="logOut" />
+		</header>
+		<form action="Specification.html">
+			<div id="heading">
+				<h2>EDIT CAR SPECIFICATIONS</h2>
+			</div>
+
+			<section>
+				<label class="left">Make<span id="span">*</span></label> <input
+					class="input" type="text" id="make" pattern="[a-zA-Z ]+"
+					name="make" required="required"><br>
+				<br>
+				<br> <label class="left">Model<span id="span">*</span></label>
+				<input class="input" type="text" name="model" id="model"
+					pattern="[a-zA-Z1-9 ]+" required="required"><br>
+				<br>
+				<br> <label class="left">EngineInCC<span id="span">*</span></label>
+				<input class="input" type="number" name="engineInCc" id="engineInCc"
+					min="500" max="4000" required="required"><br>
+				<br> <br> <label class="left">FuelCapacity<span
+					id="span">*</span></label> <input class="input" type="number"
+					name="fuelCapacity" id="fuelCapacity" min="25" max="200"
+					required="required"><br>
+				<br>
+				<br> <label class="left">Mileage<span id="span">*</span></label>
+				<input class="input" type="number" name="mileage" id="mileage"
+					min="1" max="100" required="required"><br>
+				<br>
+				<br> <label class="left">Show Room Price<span id="span">*</span></label>
+				<input class="input" type="number" name="exShowroomPrice"
+					id="showRoomPrice" min="100000" max="100000000" required="required"><br>
+				<br>
+				<br> <label class="left">RoadTax<span id="span">*</span></label>
+				<input class="input" type="number" name="roadTax" id="roadTax"
+					min="2000" max="1000000" required="required"><br>
+				<br>
+				<br> <label class="left">onRoadPrice<span id="span">*</span></label>
+				<input class="input" type="number" name="onRoadPrice"
+					id="onRoadPrice" min="102000" max="101000000" required="required"><br>
+				<br>
+				<br> <input class="button" type="submit" value="Edit"
+					onclick="updateData()">
+			</section>
+
+		</form>
+		<footer>
+			<label>Copyright &copy 2015.&nbsp All rights reserved.</label>
+		</footer>
+	</div>
+</body>
+<script type="text/javascript" src="Script.js"></script>
+</html>
