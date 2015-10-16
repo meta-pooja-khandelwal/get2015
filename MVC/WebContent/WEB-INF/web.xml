@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:web="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun. com/xml/ns/j2ee" id="WebApp_ID"
+	version="2.4">
+	<listener>
+		<listener-class>com.helper.EmployeeInitialization</listener-class>
+	</listener>
+	<servlet>
+		<display-name>EmployeeListPageController</display-name>
+		<servlet-name>EmployeeListPageController</servlet-name>
+		<servlet-class>com.controller.EmployeeListPageController
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EmployeeListPageController</servlet-name>
+		<url-pattern>/EmployeeListPageController</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<display-name>ViewDetailsController</display-name>
+		<servlet-name>ViewDetailsController</servlet-name>
+		<servlet-class>com.controller.ViewDetailsController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ViewDetailsController</servlet-name>
+		<url-pattern>/ViewDetailsController</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<display-name>LandingPageContoller</display-name>
+		<servlet-name>LandingPageContoller</servlet-name>
+		<servlet-class>com.controller.LandingPageContoller</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LandingPageContoller</servlet-name>
+		<url-pattern>/LandingPageContoller</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<display-name>RegistrationPageController</display-name>
+		<servlet-name>RegistrationPageController</servlet-name>
+		<servlet-class>com.controller.RegistrationPageController
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RegistrationPageController</servlet-name>
+		<url-pattern>/RegistrationPageController</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<display-name>Validation</display-name>
+		<servlet-name>Validation</servlet-name>
+		<servlet-class>com.controller.Validation</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Validation</servlet-name>
+		<url-pattern>/Validation</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<display-name>EditEmployeeDetailsController</display-name>
+		<servlet-name>EditEmployeeDetailsController</servlet-name>
+		<servlet-class>com.controller.EditEmployeeDetailsController
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EditEmployeeDetailsController</servlet-name>
+		<url-pattern>/EditEmployeeDetailsController</url-pattern>
+	</servlet-mapping>
+
+
+	<welcome-file-list>
+		<welcome-file>LandingPage.html</welcome-file>
+	</welcome-file-list>
+</web-app>
