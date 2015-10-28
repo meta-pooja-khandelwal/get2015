@@ -1,0 +1,5 @@
+eclipse.preferences.version=1
+encoding//src/com/temperature/webservices/FahrenheitToCelsius.java=UTF-8
+encoding//src/com/temperature/webservices/FahrenheitToCelsiusService.java=UTF-8
+encoding//src/com/temperature/webservices/FahrenheitToCelsiusServiceLocator.java=UTF-8
+encoding//src/com/temperature/webservices/FahrenheitToCelsiusSoapBindingStub.java=UTF-8
