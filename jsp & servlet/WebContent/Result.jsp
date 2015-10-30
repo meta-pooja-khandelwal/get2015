@@ -7,6 +7,7 @@
 <title>Result</title>
 </head>
 <body>
+	<%@ page errorPage="error.jsp"%>
 	<p align="center" style="font-size: 40px; font-weight: bold;">${param.message}</p>
 </body>
 </html>

@@ -12,6 +12,7 @@
 </head>
 
 <body>
+	<%@ page errorPage="error.jsp"%>
 
 	<!-- HTML semantic tag -->
 	<section>
@@ -35,6 +36,11 @@
 					<td><input type="text" name="lastName" required="required"></td>
 				</tr>
 
+				<!--Email-->
+				<tr>
+					<td><span class="span">*</span>Email</td>
+					<td><input type="email" name="email" required="required"></td>
+				</tr>
 				<!-- Password -->
 				<tr>
 					<td><span class="span">*</span>Password</td>
