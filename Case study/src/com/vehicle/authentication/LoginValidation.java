@@ -1,13 +1,12 @@
 /**
  * @author Pooja Khandelwal
- * @created date 27/10/2015
+ * @created date 29/10/2015
  * @name LoginValidation
  * @description It will check the login data whether it is valid or not ,if invalid then redirect to login page with error message ,otherwise go to VehicleHome page
  */
 package com.vehicle.authentication;
 
 import java.io.IOException;
-import java.sql.Connection;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.vehicle.exception.VehicleSystemException;
-import com.vehicle.facade.VehicleFacade;
 import com.vehicle.model.Login;
 import com.vehicle.service.VehicleService;
 import com.vehicle.user.UserType;
@@ -42,25 +40,25 @@ public class LoginValidation extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String person = request.getParameter("person");
+		System.out.println(person);
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		VehicleService iService = VehicleService.getInstance();
-		Connection connection = null;
 		Login login = null;
+		/*
+		 * Connection connection = null;
+		 * 
+		 * try { connection = iService.getConnetion(); } catch
+		 * (VehicleSystemException e) {
+		 * System.out.println("Coult not create connection with database, [" +
+		 * e.getMessage() + "]"); } VehicleFacade vehicleFacade =
+		 * VehicleFacade.getInstance();
+		 */
 		try {
-			connection = iService.getConnetion();
-		} catch (VehicleSystemException e) {
-			System.out.println("Coult not create connection with database, ["
-					+ e.getMessage() + "]");
-		}
-		VehicleFacade vehicleFacade = VehicleFacade.getInstance();
-		try {
-			login = vehicleFacade.getLoginModel(connection);
+			login = iService.getLoginModel();
 		} catch (VehicleSystemException e) {
 			System.out.println("Coult not get Login data from database, ["
 					+ e.getMessage() + "]");
-		} finally {
-			iService.closeConnetion(connection);
 		}
 		if (login.getEmail().equalsIgnoreCase(email)
 				&& login.getPassword().equalsIgnoreCase(password)) {

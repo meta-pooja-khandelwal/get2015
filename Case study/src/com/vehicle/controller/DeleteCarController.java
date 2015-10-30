@@ -1,14 +1,12 @@
 /**
  * @author Pooja Khandelwal
- * @created date 27/10/2015
+ * @created date 29/10/2015
  * @name DeleteCarController
  * @description It will call the method in VehicleFacade to delete the specified car
  */
 package com.vehicle.controller;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,9 +14,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import com.vehicle.VehicleType;
 import com.vehicle.exception.VehicleSystemException;
-import com.vehicle.facade.VehicleFacade;
+import com.vehicle.factory.VehicleFactory;
 import com.vehicle.model.Car;
+import com.vehicle.model.Vehicle;
 import com.vehicle.service.VehicleService;
 
 /**
@@ -43,7 +43,7 @@ public class DeleteCarController extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-		List<Car> carsList = new ArrayList<Car>();
+		List<Car> carsList = null;
 		if (session != null) {
 			if (session.getAttribute("carList") != null) {
 				carsList = (List<Car>) session.getAttribute("carList");
@@ -54,22 +54,24 @@ public class DeleteCarController extends HttpServlet {
 		int carPositionInList = Integer.parseInt(carPositionInListString);
 		String person = request.getParameter("person");
 		request.setAttribute("person", person);
-		Car car = new Car();
+		VehicleFactory vehicleFactory = VehicleFactory.getInstance();
+		Vehicle ivehicle = vehicleFactory.getVehicle(VehicleType.car);
+		Car car = (Car) ivehicle;
+
 		car = carsList.get(carPositionInList);
+
 		int carId = car.getCarId();
 		int vehicleId = car.getVehicleId();
 		VehicleService iService = VehicleService.getInstance();
-		Connection connection = null;
-		VehicleFacade vehicleFacade;
+		/*
+		 * Connection connection = null; VehicleFacade vehicleFacade; try {
+		 * connection = iService.getConnetion(); } catch (VehicleSystemException
+		 * e) {
+		 * System.out.println("Coult not create connection with database, [" +
+		 * e.getMessage() + "]"); } vehicleFacade = VehicleFacade.getInstance();
+		 */
 		try {
-			connection = iService.getConnetion();
-		} catch (VehicleSystemException e) {
-			System.out.println("Coult not create connection with database, ["
-					+ e.getMessage() + "]");
-		}
-		vehicleFacade = VehicleFacade.getInstance();
-		try {
-			vehicleFacade.deleteCar(vehicleId, carId, connection);
+			iService.deleteCar(vehicleId);
 			carsList.remove(carPositionInList);
 			request.setAttribute("carList", carsList);
 			String message = "Car deleted succefully";
@@ -84,8 +86,6 @@ public class DeleteCarController extends HttpServlet {
 			request.setAttribute("message", message);
 			request.getRequestDispatcher("./view/CarDekho.jsp").forward(
 					request, response);
-		} finally {
-			iService.closeConnetion(connection);
 		}
 	}
 

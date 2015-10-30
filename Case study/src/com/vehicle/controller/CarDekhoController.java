@@ -1,13 +1,12 @@
 /**
  * @author Pooja Khandelwal
- * @created date 27/10/2015
+ * @created date 29/10/2015
  * @name CarDekhoController
  * @description It will call the VehicleFacade to get the cars of selected type and then send it to CarDekho.jsp page
  */
 package com.vehicle.controller;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.vehicle.exception.VehicleSystemException;
-import com.vehicle.facade.VehicleFacade;
 import com.vehicle.model.Car;
 import com.vehicle.service.VehicleService;
 
@@ -91,19 +89,19 @@ public class CarDekhoController extends HttpServlet {
 		} else {
 			int budget = Integer.parseInt(budgetString);
 			VehicleService iService = VehicleService.getInstance();
-			Connection connection = null;
 			List<Car> carList;
+			/*
+			 * Connection connection = null;
+			 * 
+			 * try { connection = iService.getConnetion(); } catch
+			 * (VehicleSystemException e) { System.out
+			 * .println("Coult not create connection with database, [" +
+			 * e.getMessage() + "]"); } VehicleFacade vehicleFacade =
+			 * VehicleFacade.getInstance();
+			 */
 			try {
-				connection = iService.getConnetion();
-			} catch (VehicleSystemException e) {
-				System.out
-						.println("Coult not create connection with database, ["
-								+ e.getMessage() + "]");
-			}
-			VehicleFacade vehicleFacade = VehicleFacade.getInstance();
-			try {
-				carList = vehicleFacade.getCarData(make, budget, connection);
-				System.out.println(carList);
+				carList = iService.getCarData(make, budget);
+				// System.out.println(carList);
 				if (carList.size() == 0) {
 					message = "No such car found";
 					request.setAttribute("message", message);
@@ -140,8 +138,6 @@ public class CarDekhoController extends HttpServlet {
 				request.setAttribute("maxBudget", maxBudget);
 				request.getRequestDispatcher("./view/SearchCar.jsp").forward(
 						request, response);
-			} finally {
-				iService.closeConnetion(connection);
 			}
 		}
 	}

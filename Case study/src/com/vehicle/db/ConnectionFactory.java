@@ -1,6 +1,6 @@
 /**
  * @author Pooja Khandelwal
- * @created date 27/10/2015
+ * @created date 29/10/2015
  * @name ConnectionFactory
  * @description It will provide the connection object for database and have function to close the connection when transactions are completed
  */
@@ -9,7 +9,6 @@ package com.vehicle.db;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
 import com.vehicle.exception.VehicleSystemException;
 
 public class ConnectionFactory {

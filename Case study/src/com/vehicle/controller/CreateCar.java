@@ -1,21 +1,22 @@
 /**
  * @author Pooja Khandelwal
- * @created date 27/10/2015
+ * @created date 29/10/2015
  * @name CreateCar
  * @description It will get the data which is eneterd to create a new car and then call the method in VehicleFacade to isert that data into database if valid
  */
 package com.vehicle.controller;
 
 import java.io.IOException;
-import java.sql.Connection;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.vehicle.VehicleType;
 import com.vehicle.exception.VehicleSystemException;
-import com.vehicle.facade.VehicleFacade;
+import com.vehicle.factory.VehicleFactory;
 import com.vehicle.model.Car;
+import com.vehicle.model.Vehicle;
 import com.vehicle.service.VehicleService;
 
 /**
@@ -39,6 +40,7 @@ public class CreateCar extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+
 		String make = request.getParameter("make");
 		String model = request.getParameter("model");
 		String stringEngineInCc = request.getParameter("engineInCc");
@@ -63,33 +65,33 @@ public class CreateCar extends HttpServlet {
 		String createdTime = request.getParameter("createdTime");
 		String createdBy = request.getParameter("createdBy");
 		String imagePath = request.getParameter("imagePath");
-		Car vehicle = new Car();
-		vehicle.setMake(make);
-		vehicle.setModel(model);
-		vehicle.setEngineInCc(engineInCc);
-		vehicle.setFuelCapacity(fuelCapacity);
-		vehicle.setMileage(mileage);
-		vehicle.setRoadTax(roadTax);
-		vehicle.setOnRoadPrice(onRoadPrice);
-		vehicle.setShowRoomPrice(showRoomPrice);
-		vehicle.setCreatedTime(createdTime);
-		vehicle.setCreatedBy(createdBy);
-		vehicle.setImagePath(imagePath);
-		vehicle.setAc(ac);
-		vehicle.setAccessorykit(accessorykit);
-		vehicle.setPowerSteering(powerSteering);
+		VehicleFactory vehicleFactory = VehicleFactory.getInstance();
+		Vehicle ivehicle = vehicleFactory.getVehicle(VehicleType.car);
+		Car car = (Car) ivehicle;
+		car.setMake(make);
+		car.setModel(model);
+		car.setEngineInCc(engineInCc);
+		car.setFuelCapacity(fuelCapacity);
+		car.setMileage(mileage);
+		car.setRoadTax(roadTax);
+		car.setOnRoadPrice(onRoadPrice);
+		car.setShowRoomPrice(showRoomPrice);
+		car.setCreatedTime(createdTime);
+		car.setCreatedBy(createdBy);
+		car.setImagePath(imagePath);
+		car.setAc(ac);
+		car.setAccessorykit(accessorykit);
+		car.setPowerSteering(powerSteering);
 		VehicleService iService = VehicleService.getInstance();
-		Connection connection = null;
-		VehicleFacade vehicleFacade;
+		/*
+		 * Connection connection = null; VehicleFacade vehicleFacade; try {
+		 * connection = iService.getConnetion(); } catch (VehicleSystemException
+		 * e) {
+		 * System.out.println("Coult not create connection with database, [" +
+		 * e.getMessage() + "]"); } vehicleFacade = VehicleFacade.getInstance();
+		 */
 		try {
-			connection = iService.getConnetion();
-		} catch (VehicleSystemException e) {
-			System.out.println("Coult not create connection with database, ["
-					+ e.getMessage() + "]");
-		}
-		vehicleFacade = VehicleFacade.getInstance();
-		try {
-			vehicleFacade.createCar(vehicle, connection);
+			iService.createCar(car);
 			request.getRequestDispatcher("./view/CreateCar.jsp").forward(
 					request, response);
 		} catch (VehicleSystemException e) {
@@ -99,8 +101,6 @@ public class CreateCar extends HttpServlet {
 			request.setAttribute("message", message);
 			request.getRequestDispatcher("./view/CreateCar.jsp").forward(
 					request, response);
-		} finally {
-			iService.closeConnetion(connection);
 		}
 	}
 

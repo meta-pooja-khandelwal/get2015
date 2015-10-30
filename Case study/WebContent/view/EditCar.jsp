@@ -17,7 +17,7 @@
 			style="color: red; font-size: 20px; font-weight: bold;">${message}</p>
 		<header> <%
  	String person = request.getParameter("person");
- 	Car car = new Car();
+ 	Car car =null;
  	if (request.getAttribute("car") != null) {
  		car = (Car) request.getAttribute("car");
  	}

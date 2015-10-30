@@ -1,6 +1,6 @@
 /**
  * @author Pooja Khandelwal
- * @created date 27/10/2015
+ * @created date 29/10/2015
  * @name VehicleFacade
  * @description It is  the layer between VehicleDao and user request.It will call the methods in VehicleDao to perform database operations
  */
@@ -8,7 +8,6 @@ package com.vehicle.facade;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import com.vehicle.db.VehicleDao;
 import com.vehicle.exception.VehicleSystemException;
@@ -92,38 +91,14 @@ public class VehicleFacade {
 	 *            (object of Car)
 	 * @param connection
 	 * @throws VehicleSystemException
+	 * @throws SQLException
 	 */
-	public void createCar(Car vehicle, Connection connection)
-			throws VehicleSystemException {
+	public void createCar(Car car, Connection connection)
+			throws VehicleSystemException, SQLException {
 		VehicleDao vehicleDao = VehicleDao.getInstance();
-		try {
-			vehicleDao.createVehicle(vehicle, connection);
-			int id = vehicleDao.getId(connection);
-			vehicleDao.createCar(id, vehicle, connection);
-			try {
-				connection.commit();
-			} catch (SQLException e) {
-				System.out.println("Coult not commit the transaction, ["
-						+ e.getMessage() + "]");
-				throw new VehicleSystemException(
-						"Coult not commit the transaction, [" + e.getMessage()
-								+ "]", e);
-			}
-		} catch (Exception e) {
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				System.out.println("Error in Transaction roll back,["
-						+ e1.getMessage() + "]");
-				throw new VehicleSystemException(
-						"Error in  Transaction roll back,[" + e1.getMessage()
-								+ "]", e);
-			}
-			System.out
-					.println("Transaction roll back,[" + e.getMessage() + "]");
-			throw new VehicleSystemException("Transaction roll back,["
-					+ e.getMessage() + "]", e);
-		}
+		vehicleDao.createVehicle(car, connection);
+		int id = vehicleDao.getId(connection);
+		vehicleDao.createCar(id, car, connection);
 	}
 
 	/**
@@ -133,37 +108,13 @@ public class VehicleFacade {
 	 * @param connection
 	 * @return makes(list of all the distinct companies of car)
 	 * @throws VehicleSystemException
+	 * @throws SQLException
 	 */
 	public List<String> findAllMakesOfCar(Connection connection)
-			throws VehicleSystemException {
+			throws VehicleSystemException, SQLException {
 		VehicleDao vehicleDao = VehicleDao.getInstance();
-		List<String> makes = new ArrayList<String>();
-		try {
-			makes = vehicleDao.fetchMakesOfcar(connection);
-			try {
-				connection.commit();
-			} catch (SQLException e) {
-				System.out.println("Coult not commit the transaction, ["
-						+ e.getMessage() + "]");
-				throw new VehicleSystemException(
-						"Coult not commit the transaction, [" + e.getMessage()
-								+ "]", e);
-			}
-		} catch (Exception e) {
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				System.out.println("Error in Transaction roll back,["
-						+ e1.getMessage() + "]");
-				throw new VehicleSystemException(
-						"Error in  Transaction roll back,[" + e1.getMessage()
-								+ "]", e);
-			}
-			System.out
-					.println("Transaction roll back,[" + e.getMessage() + "]");
-			throw new VehicleSystemException("Transaction roll back,["
-					+ e.getMessage() + "]", e);
-		}
+		List<String> makes;
+		makes = vehicleDao.fetchMakesOfcar(connection);
 		return makes;
 	}
 
@@ -174,37 +125,13 @@ public class VehicleFacade {
 	 * @param connection
 	 * @return minBudgetOfcar(min showRoom price from all the cars)
 	 * @throws VehicleSystemException
+	 * @throws SQLException
 	 */
 	public int findMinBudgetOfCar(Connection connection)
-			throws VehicleSystemException {
+			throws VehicleSystemException, SQLException {
 		VehicleDao vehicleDao = VehicleDao.getInstance();
 		int minBudgetOfCar;
-		try {
-			minBudgetOfCar = vehicleDao.fetchMinBudgetOfCar(connection);
-			try {
-				connection.commit();
-			} catch (SQLException e) {
-				System.out.println("Coult not commit the transaction, ["
-						+ e.getMessage() + "]");
-				throw new VehicleSystemException(
-						"Coult not commit the transaction, [" + e.getMessage()
-								+ "]", e);
-			}
-		} catch (Exception e) {
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				System.out.println("Error in Transaction roll back,["
-						+ e1.getMessage() + "]");
-				throw new VehicleSystemException(
-						"Error in  Transaction roll back,[" + e1.getMessage()
-								+ "]", e);
-			}
-			System.out
-					.println("Transaction roll back,[" + e.getMessage() + "]");
-			throw new VehicleSystemException("Transaction roll back,["
-					+ e.getMessage() + "]", e);
-		}
+		minBudgetOfCar = vehicleDao.fetchMinBudgetOfCar(connection);
 		return minBudgetOfCar;
 	}
 
@@ -215,37 +142,13 @@ public class VehicleFacade {
 	 * @param connection
 	 * @return maxBudgetOfcar(max showRoom price from all the cars)
 	 * @throws VehicleSystemException
+	 * @throws SQLException
 	 */
 	public int findMaxBudgetOfCar(Connection connection)
-			throws VehicleSystemException {
+			throws VehicleSystemException, SQLException {
 		VehicleDao vehicleDao = VehicleDao.getInstance();
 		int maxBudgetOfCar;
-		try {
-			maxBudgetOfCar = vehicleDao.fetchMaxBudgetOfCar(connection);
-			try {
-				connection.commit();
-			} catch (SQLException e) {
-				System.out.println("Coult not commit the transaction, ["
-						+ e.getMessage() + "]");
-				throw new VehicleSystemException(
-						"Coult not commit the transaction, [" + e.getMessage()
-								+ "]", e);
-			}
-		} catch (Exception e) {
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				System.out.println("Error in Transaction roll back,["
-						+ e1.getMessage() + "]");
-				throw new VehicleSystemException(
-						"Error in  Transaction roll back,[" + e1.getMessage()
-								+ "]", e);
-			}
-			System.out
-					.println("Transaction roll back,[" + e.getMessage() + "]");
-			throw new VehicleSystemException("Transaction roll back,["
-					+ e.getMessage() + "]", e);
-		}
+		maxBudgetOfCar = vehicleDao.fetchMaxBudgetOfCar(connection);
 		return maxBudgetOfCar;
 	}
 
@@ -260,37 +163,13 @@ public class VehicleFacade {
 	 * @param connection
 	 * @return carList(list of selected cars)
 	 * @throws VehicleSystemException
+	 * @throws SQLException
 	 */
 	public List<Car> getCarData(String make, int budget, Connection connection)
-			throws VehicleSystemException {
+			throws VehicleSystemException, SQLException {
 		VehicleDao vehicleDao = VehicleDao.getInstance();
 		List<Car> carList;
-		try {
-			carList = vehicleDao.fetchCarData(make, budget, connection);
-			try {
-				connection.commit();
-			} catch (SQLException e) {
-				System.out.println("Coult not commit the transaction, ["
-						+ e.getMessage() + "]");
-				throw new VehicleSystemException(
-						"Coult not commit the transaction, [" + e.getMessage()
-								+ "]", e);
-			}
-		} catch (Exception e) {
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				System.out.println("Error in Transaction roll back,["
-						+ e1.getMessage() + "]");
-				throw new VehicleSystemException(
-						"Error in  Transaction roll back,[" + e1.getMessage()
-								+ "]", e);
-			}
-			System.out
-					.println("Transaction roll back,[" + e.getMessage() + "]");
-			throw new VehicleSystemException("Transaction roll back,["
-					+ e.getMessage() + "]", e);
-		}
+		carList = vehicleDao.fetchCarData(make, budget, connection);
 		return carList;
 	}
 
@@ -303,37 +182,14 @@ public class VehicleFacade {
 	 * @param connection
 	 * @return
 	 * @throws VehicleSystemException
+	 * @throws SQLException
 	 */
-	public void editCar(Car vehicle, Connection connection)
-			throws VehicleSystemException {
+	public void editCar(Car car, Connection connection)
+			throws VehicleSystemException, SQLException {
 		VehicleDao vehicleDao = VehicleDao.getInstance();
-		try {
-			vehicleDao.editVehicle(vehicle, connection);
-			vehicleDao.editCar(vehicle, connection);
-			try {
-				connection.commit();
-			} catch (SQLException e) {
-				System.out.println("Coult not commit the transaction, ["
-						+ e.getMessage() + "]");
-				throw new VehicleSystemException(
-						"Coult not commit the transaction, [" + e.getMessage()
-								+ "]", e);
-			}
-		} catch (Exception e) {
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				System.out.println("Error in Transaction roll back,["
-						+ e1.getMessage() + "]");
-				throw new VehicleSystemException(
-						"Error in  Transaction roll back,[" + e1.getMessage()
-								+ "]", e);
-			}
-			System.out
-					.println("Transaction roll back,[" + e.getMessage() + "]");
-			throw new VehicleSystemException("Transaction roll back,["
-					+ e.getMessage() + "]", e);
-		}
+
+		vehicleDao.editVehicle(car, connection);
+		vehicleDao.editCar(car, connection);
 	}
 
 	/**
@@ -347,36 +203,11 @@ public class VehicleFacade {
 	 * @param connection
 	 * @return
 	 * @throws VehicleSystemException
+	 * @throws SQLException
 	 */
-	public void deleteCar(int vehicleId, int carId, Connection connection)
-			throws VehicleSystemException {
+	public void deleteCar(int vehicleId, Connection connection)
+			throws VehicleSystemException, SQLException {
 		VehicleDao vehicleDao = VehicleDao.getInstance();
-		try {
-			vehicleDao.deleteCar(vehicleId, carId, connection);
-			try {
-				connection.commit();
-			} catch (SQLException e) {
-				System.out.println("Coult not commit the transaction, ["
-						+ e.getMessage() + "]");
-				throw new VehicleSystemException(
-						"Coult not commit the transaction, [" + e.getMessage()
-								+ "]", e);
-			}
-		} catch (Exception e) {
-			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				System.out.println("Error in Transaction roll back,["
-						+ e1.getMessage() + "]");
-				throw new VehicleSystemException(
-						"Error in  Transaction roll back,[" + e1.getMessage()
-								+ "]", e);
-			}
-			System.out
-					.println("Transaction roll back,[" + e.getMessage() + "]");
-			throw new VehicleSystemException("Transaction roll back,["
-					+ e.getMessage() + "]", e);
-		}
-
+		vehicleDao.deleteVehicle(vehicleId, connection);
 	}
 }

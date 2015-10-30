@@ -18,8 +18,8 @@
    
 	
 	%>
-
-
+ 
+ 
 
 		<header id="head"> <img src="./view/logo.png"
 			alt="car dekho logo" width="400px" height="100px" align="left">
@@ -38,7 +38,7 @@
 			value="Home" id="goHome" /> <!--  input type="hidden" value="<%=person %>" name="person"/>	 -->
 		</header>
 		<%
-		List<Car> carsList=new ArrayList<Car>();
+		List<Car> carsList;
 		carsList=(List<Car>)request.getAttribute("carList");
 	if(carsList.size()==0){
 	%>
@@ -52,7 +52,7 @@
 		<table>
 
 			<%
-			
+			request.setAttribute("carList", carsList);
 			session=request.getSession(true);
 			session.setAttribute("carList", carsList);
 			for(int i=0;i<carsList.size();i++){

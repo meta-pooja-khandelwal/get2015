@@ -42,7 +42,7 @@
 					<option value="selectCompany" selected disabled>-Select-</option>
 
 					<%
-					   List<String> makes=new ArrayList<String>();
+					   List<String> makes=null;
 					   //makes=(List<String>)request.getAttribute("makes");
 					   if(request.getAttribute("makes")!=null){
 					         makes=(List<String>)request.getAttribute("makes");

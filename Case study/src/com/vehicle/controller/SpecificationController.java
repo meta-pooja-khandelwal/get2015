@@ -1,13 +1,12 @@
 /**
  * @author Pooja Khandelwal
- * @created date 27/10/2015
+ * @created date 29/10/2015
  * @name SpecificationController
  * @description It will forward the request to Specification.jsp page with the specified car to show the specification of that car
  */
 package com.vehicle.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,7 +14,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import com.vehicle.VehicleType;
+import com.vehicle.factory.VehicleFactory;
 import com.vehicle.model.Car;
+import com.vehicle.model.Vehicle;
 
 /**
  * Servlet implementation class SpecificationController
@@ -38,14 +40,17 @@ public class SpecificationController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		List<Car> carsList = new ArrayList<Car>();
+		List<Car> carsList = null;
+		System.out.println("list" + request.getAttribute("carList"));
 		String person = request.getParameter("person");
 		request.setAttribute("person", person);
 		String carPositionInListString = request
 				.getParameter("carPositionInList");
 		int carPositionInList = Integer.parseInt(carPositionInListString);
 		HttpSession session = request.getSession(false);
-		Car car = new Car();
+		VehicleFactory vehicleFactory = VehicleFactory.getInstance();
+		Vehicle ivehicle = vehicleFactory.getVehicle(VehicleType.car);
+		Car car = (Car) ivehicle;
 		if (session != null) {
 			if (session.getAttribute("carList") != null) {
 				carsList = (List<Car>) session.getAttribute("carList");

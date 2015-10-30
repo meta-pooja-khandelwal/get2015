@@ -1,14 +1,12 @@
 /**
  * @author Pooja Khandelwal
- * @created date 27/10/2015
+ * @created date 29/10/2015
  * @name SearchCarController
  * @description It will call the method in Facade to get the all Company names(makes),and minimum and maximum budget(showRoom Price) of car
  */
 package com.vehicle.controller;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,7 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.vehicle.exception.VehicleSystemException;
-import com.vehicle.facade.VehicleFacade;
 import com.vehicle.service.VehicleService;
 
 /**
@@ -43,23 +40,21 @@ public class SearchCarController extends HttpServlet {
 		// TODO Auto-generated method stub
 		String person = request.getParameter("person");
 		VehicleService iService = VehicleService.getInstance();
-		Connection connection = null;
-		VehicleFacade vehicleFacade;
-		List<String> makes = new ArrayList<String>();
+		List<String> makes = null;
 		int minBudget = 0;
 		int maxBudget = 0;
+		/*
+		 * Connection connection = null; VehicleFacade vehicleFacade;
+		 * 
+		 * try { connection = iService.getConnetion(); } catch
+		 * (VehicleSystemException e) { // TODO Auto-generated catch block
+		 * System.out.println("Coult not create connection with database, [" +
+		 * e.getMessage() + "]"); } vehicleFacade = VehicleFacade.getInstance();
+		 */
 		try {
-			connection = iService.getConnetion();
-		} catch (VehicleSystemException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Coult not create connection with database, ["
-					+ e.getMessage() + "]");
-		}
-		vehicleFacade = VehicleFacade.getInstance();
-		try {
-			makes = vehicleFacade.findAllMakesOfCar(connection);
-			minBudget = vehicleFacade.findMinBudgetOfCar(connection);
-			maxBudget = vehicleFacade.findMaxBudgetOfCar(connection);
+			makes = iService.findAllMakesOfCar();
+			minBudget = iService.findMinBudgetOfCar();
+			maxBudget = iService.findMaxBudgetOfCar();
 			request.setAttribute("person", person);
 			request.setAttribute("makes", makes);
 			request.setAttribute("minBudget", minBudget);
@@ -74,8 +69,6 @@ public class SearchCarController extends HttpServlet {
 			request.getRequestDispatcher("./view/error.jsp").forward(request,
 					response);
 
-		} finally {
-			iService.closeConnetion(connection);
 		}
 	}
 

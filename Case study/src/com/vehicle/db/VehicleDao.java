@@ -1,6 +1,6 @@
 /**
  * @author Pooja Khandelwal
- * @created date 27/10/2015
+ * @created date 29/10/2015
  * @name VehicleDao
  * @description It will handle all the database query and execute them 
  */
@@ -13,9 +13,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.vehicle.VehicleType;
 import com.vehicle.exception.VehicleSystemException;
+import com.vehicle.factory.VehicleFactory;
 import com.vehicle.model.Car;
 import com.vehicle.model.Login;
+import com.vehicle.model.Vehicle;
 
 public class VehicleDao {
 	private static VehicleDao vehicleDao;
@@ -101,17 +105,18 @@ public class VehicleDao {
 	 *            (object of Car)
 	 * @param connection
 	 * @throws VehicleSystemException
+	 * @throws SQLException
 	 */
-	public void createCar(int id, Car vehicle, Connection connection)
-			throws VehicleSystemException {
+	public void createCar(int id, Car car, Connection connection)
+			throws VehicleSystemException, SQLException {
 
 		String query = "INSERT INTO car(carId,ac,powerSteering,accessoryKit)"
 				+ "VALUES(?,?,?,?)";
 		PreparedStatement preparedStatement = null;
 		int carId = id;
-		String ac = vehicle.getAc();
-		String powerSteering = vehicle.getPowerSteering();
-		String accessoryKit = vehicle.getAccessorykit();
+		String ac = car.getAc();
+		String powerSteering = car.getPowerSteering();
+		String accessoryKit = car.getAccessorykit();
 		try {
 			/* creating prepared statement to execute the query */
 			preparedStatement = connection.prepareStatement(query);
@@ -121,11 +126,6 @@ public class VehicleDao {
 			preparedStatement.setString(3, powerSteering);
 			preparedStatement.setString(4, accessoryKit);
 			preparedStatement.executeUpdate();
-		} catch (SQLException e) {
-			System.out.println("Coult not create car table, [" + e.getMessage()
-					+ "]");
-			throw new VehicleSystemException("Coult not create car table, ["
-					+ e.getMessage() + "]", e);
 		} finally {
 			try {
 				/* close prepared statement */
@@ -133,6 +133,7 @@ public class VehicleDao {
 					preparedStatement.close();
 				}
 			} catch (SQLException e) {
+				System.out.println("[" + e.getMessage() + "]");
 				throw new VehicleSystemException("[" + e.getMessage() + "]", e);
 			}
 		}
@@ -146,24 +147,25 @@ public class VehicleDao {
 	 *            (object of Car)
 	 * @param connection
 	 * @throws VehicleSystemException
+	 * @throws SQLException
 	 */
-	public void createVehicle(Car vehicle, Connection connection)
-			throws VehicleSystemException {
+	public void createVehicle(Car car, Connection connection)
+			throws VehicleSystemException, SQLException {
 		String query = "INSERT INTO vehicle(make,model,engineInCC,fuelCapacity,mileage, showRoomPrice,roadTax,"
 				+ "onRoadPrice,created_time,createdBy,imagePath)"
 				+ "VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 		PreparedStatement preparedStatement = null;
-		String make = vehicle.getMake();
-		String model = vehicle.getModel();
-		int engineInCC = vehicle.getEngineInCc();
-		int fuelCapacity = vehicle.getFuelCapacity();
-		int mileage = vehicle.getMileage();
-		int showRoomPrice = vehicle.getShowRoomPrice();
-		int roadTax = vehicle.getRoadTax();
-		int onRoadPrice = vehicle.getOnRoadPrice();
-		String created_time = vehicle.getCreatedTime();
-		String createdBy = vehicle.getCreatedBy();
-		String imagePath = vehicle.getImagePath();
+		String make = car.getMake();
+		String model = car.getModel();
+		int engineInCC = car.getEngineInCc();
+		int fuelCapacity = car.getFuelCapacity();
+		int mileage = car.getMileage();
+		int showRoomPrice = car.getShowRoomPrice();
+		int roadTax = car.getRoadTax();
+		int onRoadPrice = car.getOnRoadPrice();
+		String created_time = car.getCreatedTime();
+		String createdBy = car.getCreatedBy();
+		String imagePath = car.getImagePath();
 		try {
 			/* creating prepared statement to execute the query */
 			preparedStatement = connection.prepareStatement(query);
@@ -180,12 +182,6 @@ public class VehicleDao {
 			preparedStatement.setString(10, createdBy);
 			preparedStatement.setString(11, imagePath);
 			preparedStatement.executeUpdate();
-		} catch (SQLException e) {
-			System.out.println("Coult not create vehicle table, ["
-					+ e.getMessage() + "]");
-			throw new VehicleSystemException(
-					"Coult not create vehicle table, [" + e.getMessage() + "]",
-					e);
 		} finally {
 			try {
 				/* close prepared statement */
@@ -193,6 +189,7 @@ public class VehicleDao {
 					preparedStatement.close();
 				}
 			} catch (SQLException e) {
+				System.out.println("[" + e.getMessage() + "]");
 				throw new VehicleSystemException("[" + e.getMessage() + "]", e);
 			}
 		}
@@ -204,9 +201,11 @@ public class VehicleDao {
 	 * @param connection
 	 * @return id(latest id value in vehicle table)
 	 * @throws VehicleSystemException
+	 * @throws SQLException
+	 * @throws NumberFormatException
 	 */
 	public static int getId(Connection connection)
-			throws VehicleSystemException {
+			throws VehicleSystemException, NumberFormatException, SQLException {
 		/* select query to be executed to get the id */
 		String query = "SELECT vehicleId FROM vehicle ORDER BY vehicleId DESC LIMIT 0,1";
 		/* getting connection with database */
@@ -223,8 +222,6 @@ public class VehicleDao {
 				String id1 = resultSet.getString("vehicleId");
 				id = Integer.parseInt(id1);
 			}
-		} catch (SQLException e) {
-			throw new VehicleSystemException("[" + e.getMessage() + "]", e);
 		} finally {
 			try {
 				/* close result set */
@@ -237,6 +234,7 @@ public class VehicleDao {
 				}
 				/* close connection */
 			} catch (SQLException e) {
+				System.out.println("[" + e.getMessage() + "]");
 				throw new VehicleSystemException("[" + e.getMessage() + "]", e);
 			}
 		}
@@ -250,9 +248,10 @@ public class VehicleDao {
 	 * @param connection
 	 * @return makes(list of all the distinct companies of car)
 	 * @throws VehicleSystemException
+	 * @throws SQLException
 	 */
 	public List<String> fetchMakesOfcar(Connection connection)
-			throws VehicleSystemException {
+			throws VehicleSystemException, SQLException {
 		String query = "Select distinct v.make From vehicle v,car c where v.vehicleId=c.carId";
 		Statement statement = null;
 		ResultSet resultSet = null;
@@ -271,8 +270,6 @@ public class VehicleDao {
 				// count++;
 			}
 			// System.out.println(count);
-		} catch (SQLException e) {
-			throw new VehicleSystemException("[" + e.getMessage() + "]", e);
 		} finally {
 			try {
 				/* close result set */
@@ -286,6 +283,7 @@ public class VehicleDao {
 				/* close connection */
 
 			} catch (SQLException e) {
+				System.out.println("[" + e.getMessage() + "]");
 				throw new VehicleSystemException("[" + e.getMessage() + "]", e);
 			}
 		}
@@ -300,9 +298,10 @@ public class VehicleDao {
 	 * @param connection
 	 * @return minBudgetOfcar(min showRoom price from all the cars)
 	 * @throws VehicleSystemException
+	 * @throws SQLException
 	 */
 	public int fetchMinBudgetOfCar(Connection connection)
-			throws VehicleSystemException {
+			throws VehicleSystemException, SQLException {
 		String query = "select min(v.showRoomPrice) as minBudget From vehicle v,car c where v.vehicleId=c.carId";
 		Statement statement = null;
 		ResultSet resultSet = null;
@@ -318,8 +317,6 @@ public class VehicleDao {
 			if (resultSet.next()) {
 				minBudgetOfcar = resultSet.getInt("minBudget");
 			}
-		} catch (SQLException e) {
-			throw new VehicleSystemException("[" + e.getMessage() + "]", e);
 		} finally {
 			try {
 				/* close result set */
@@ -332,6 +329,7 @@ public class VehicleDao {
 				}
 				/* close connection */
 			} catch (SQLException e) {
+				System.out.println("[" + e.getMessage() + "]");
 				throw new VehicleSystemException("[" + e.getMessage() + "]", e);
 			}
 		}
@@ -345,9 +343,10 @@ public class VehicleDao {
 	 * @param connection
 	 * @return maxBudgetOfcar(max showRoom price from all the cars)
 	 * @throws VehicleSystemException
+	 * @throws SQLException
 	 */
 	public int fetchMaxBudgetOfCar(Connection connection)
-			throws VehicleSystemException {
+			throws VehicleSystemException, SQLException {
 		String query = "select max(v.showRoomPrice) as maxBudget From vehicle v,car c where v.vehicleId=c.carId";
 		Statement statement = null;
 		ResultSet resultSet = null;
@@ -363,8 +362,6 @@ public class VehicleDao {
 			if (resultSet.next()) {
 				maxBudgetOfcar = resultSet.getInt("maxBudget");
 			}
-		} catch (SQLException e) {
-			throw new VehicleSystemException("[" + e.getMessage() + "]", e);
 		} finally {
 			try {
 				/* close result set */
@@ -377,6 +374,7 @@ public class VehicleDao {
 				}
 				/* close connection */
 			} catch (SQLException e) {
+				System.out.println("[" + e.getMessage() + "]");
 				throw new VehicleSystemException("[" + e.getMessage() + "]", e);
 			}
 		}
@@ -394,9 +392,10 @@ public class VehicleDao {
 	 * @param connection
 	 * @return carList(list of selected cars)
 	 * @throws VehicleSystemException
+	 * @throws SQLException
 	 */
 	public List<Car> fetchCarData(String make, int budget, Connection connection)
-			throws VehicleSystemException {
+			throws VehicleSystemException, SQLException {
 		String query = "select * from vehicle v,car c where v.vehicleId=c.carId And v.make=? and v.showRoomPrice<=?";
 		PreparedStatement preparedStatement = null;
 		ResultSet resultSet = null;
@@ -409,7 +408,9 @@ public class VehicleDao {
 			preparedStatement.setInt(2, budget);
 			resultSet = preparedStatement.executeQuery();
 			while (resultSet.next()) {
-				Car car = new Car();
+				VehicleFactory vehicleFactory = VehicleFactory.getInstance();
+				Vehicle iVehicle = vehicleFactory.getVehicle(VehicleType.car);
+				Car car = (Car) iVehicle;
 				car.setVehicleId(resultSet.getInt("vehicleId"));
 				car.setMake(resultSet.getString("make"));
 				car.setModel(resultSet.getString("model"));
@@ -429,8 +430,6 @@ public class VehicleDao {
 				car.setPowerSteering(resultSet.getString("powerSteering"));
 				carList.add(car);
 			}
-		} catch (SQLException e) {
-			throw new VehicleSystemException("[" + e.getMessage() + "]", e);
 		} finally {
 			try {
 				/* close result set */
@@ -443,6 +442,7 @@ public class VehicleDao {
 				}
 				/* close connection */
 			} catch (SQLException e) {
+				System.out.println("[" + e.getMessage() + "]");
 				throw new VehicleSystemException("[" + e.getMessage() + "]", e);
 			}
 		}
@@ -459,15 +459,15 @@ public class VehicleDao {
 	 * @return
 	 * @throws VehicleSystemException
 	 */
-	public void editCar(Car vehicle, Connection connection)
+	public void editCar(Car car, Connection connection)
 			throws VehicleSystemException {
 
 		String query = "UPDATE car SET ac=?,powerSteering=?,accessoryKit=? WHERE carId=?";
 		PreparedStatement preparedStatement = null;
-		int carId = vehicle.getCarId();
-		String ac = vehicle.getAc();
-		String powerSteering = vehicle.getPowerSteering();
-		String accessoryKit = vehicle.getAccessorykit();
+		int carId = car.getCarId();
+		String ac = car.getAc();
+		String powerSteering = car.getPowerSteering();
+		String accessoryKit = car.getAccessorykit();
 		try {
 			/* creating prepared statement to execute the query */
 			preparedStatement = connection.prepareStatement(query);
@@ -503,23 +503,24 @@ public class VehicleDao {
 	 * @param connection
 	 * @return
 	 * @throws VehicleSystemException
+	 * @throws SQLException
 	 */
-	public void editVehicle(Car vehicle, Connection connection)
-			throws VehicleSystemException {
+	public void editVehicle(Car car, Connection connection)
+			throws VehicleSystemException, SQLException {
 		String query = "UPDATE vehicle SET make=?,model=?,engineInCC=?,fuelCapacity=?,mileage=?,showRoomPrice=?,roadTax=?,onRoadPrice=?,created_time=?,createdBy=?,imagePath=? WHERE vehicleId=?";
 		PreparedStatement preparedStatement = null;
-		int vehicleId = vehicle.getVehicleId();
-		String make = vehicle.getMake();
-		String model = vehicle.getModel();
-		int engineInCC = vehicle.getEngineInCc();
-		int fuelCapacity = vehicle.getFuelCapacity();
-		int mileage = vehicle.getMileage();
-		int showRoomPrice = vehicle.getShowRoomPrice();
-		int roadTax = vehicle.getRoadTax();
-		int onRoadPrice = vehicle.getOnRoadPrice();
-		String created_time = vehicle.getCreatedTime();
-		String createdBy = vehicle.getCreatedBy();
-		String imagePath = vehicle.getImagePath();
+		int vehicleId = car.getVehicleId();
+		String make = car.getMake();
+		String model = car.getModel();
+		int engineInCC = car.getEngineInCc();
+		int fuelCapacity = car.getFuelCapacity();
+		int mileage = car.getMileage();
+		int showRoomPrice = car.getShowRoomPrice();
+		int roadTax = car.getRoadTax();
+		int onRoadPrice = car.getOnRoadPrice();
+		String created_time = car.getCreatedTime();
+		String createdBy = car.getCreatedBy();
+		String imagePath = car.getImagePath();
 		try {
 			/* creating prepared statement to execute the query */
 			preparedStatement = connection.prepareStatement(query);
@@ -538,11 +539,6 @@ public class VehicleDao {
 			preparedStatement.setString(11, imagePath);
 			preparedStatement.setInt(12, vehicleId);
 			preparedStatement.executeUpdate();
-		} catch (SQLException e) {
-			System.out.println("Coult not Edit vehicle table, ["
-					+ e.getMessage() + "]");
-			throw new VehicleSystemException("Coult not Edit vehicle table, ["
-					+ e.getMessage() + "]", e);
 		} finally {
 			try {
 				/* close prepared statement */
@@ -550,59 +546,10 @@ public class VehicleDao {
 					preparedStatement.close();
 				}
 			} catch (SQLException e) {
+				System.out.println("[" + e.getMessage() + "]");
 				throw new VehicleSystemException("[" + e.getMessage() + "]", e);
 			}
 		}
-	}
-
-	/**
-	 * @name deleteCar()
-	 * @description it will delete the specified car from Car table of
-	 *              VehicleDekho database
-	 * @param vehicleId
-	 *            (vehicleId of car which has to be deleted)
-	 * @param carId
-	 *            (carId of car which has to be deleted)
-	 * @param connection
-	 * @return
-	 * @throws VehicleSystemException
-	 */
-	public void deleteCar(int vehicleId, int carId, Connection connection)
-			throws VehicleSystemException {
-		deleteVehicle(vehicleId, connection);
-		/*
-		 * String query="DELETE FROM car WHERE carId=?";
-		 * 
-		 * PreparedStatement preparedStatement = null;
-		 * 
-		 * 
-		 * try {
-		 */
-		/* creating prepared statement to execute the query */
-		/*
-		 * preparedStatement = connection.prepareStatement(query);
-		 * 
-		 * /* setting the parameters in prepared statement for insert query
-		 */
-		/*
-		 * preparedStatement.setInt(1, carId);
-		 * preparedStatement.executeUpdate();
-		 * 
-		 * } catch (SQLException e) {
-		 * System.out.println("Coult not Delete from Car table, [" +
-		 * e.getMessage() + "]"); throw new
-		 * VehicleSystemException("Coult not Delete from car table, [" +
-		 * e.getMessage() + "]", e); } finally { try {
-		 */
-		/* close prepared statement */
-		/*
-		 * if (preparedStatement != null) { preparedStatement.close(); }
-		 * 
-		 * } catch (SQLException e) {
-		 * 
-		 * throw new VehicleSystemException("[" + e.getMessage() + "]", e); } }
-		 */
-
 	}
 
 	/**
@@ -614,9 +561,10 @@ public class VehicleDao {
 	 * @param connection
 	 * @return
 	 * @throws VehicleSystemException
+	 * @throws SQLException
 	 */
-	private void deleteVehicle(int vehicleId, Connection connection)
-			throws VehicleSystemException {
+	public void deleteVehicle(int vehicleId, Connection connection)
+			throws VehicleSystemException, SQLException {
 		String query = "DELETE FROM vehicle WHERE vehicleId=?";
 		PreparedStatement preparedStatement = null;
 		try {
@@ -626,12 +574,6 @@ public class VehicleDao {
 			/* setting the parameters in prepared statement for insert query */
 			preparedStatement.setInt(1, vehicleId);
 			preparedStatement.executeUpdate();
-		} catch (SQLException e) {
-			System.out.println("Coult not Delete from vehicle table, ["
-					+ e.getMessage() + "]");
-			throw new VehicleSystemException(
-					"Coult not Delete from vehicle table, [" + e.getMessage()
-							+ "]", e);
 		} finally {
 			try {
 				/* close prepared statement */
@@ -640,7 +582,7 @@ public class VehicleDao {
 				}
 
 			} catch (SQLException e) {
-
+				System.out.println("[" + e.getMessage() + "]");
 				throw new VehicleSystemException("[" + e.getMessage() + "]", e);
 			}
 		}

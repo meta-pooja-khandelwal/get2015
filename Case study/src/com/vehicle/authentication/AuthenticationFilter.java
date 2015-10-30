@@ -1,13 +1,12 @@
 /**
  * @author Pooja Khandelwal
- * @created date 27/10/2015
+ * @created date 29/10/2015
  * @name AuthenticationFilter
  * @description this is filter which will accept the request and then perform some operation with this request and then if valid then pass it to requested servlet or jsp page, otherwise send it to login.jsp page 
  */
 package com.vehicle.authentication;
 
 import java.io.IOException;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -49,12 +48,13 @@ public class AuthenticationFilter implements Filter {
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
+		System.out.println("filter 1");
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		String uri = req.getRequestURI();
 		this.context.log("Requested Resource::" + uri);
 		HttpSession session = req.getSession(false);
-		System.out.println(session);
+		// System.out.println(session);
 		if (session == null
 				&& (uri.endsWith("CreateCar")
 						|| uri.endsWith("CreateCarController")
@@ -77,7 +77,7 @@ public class AuthenticationFilter implements Filter {
 							|| uri.endsWith("EditCarController")
 							|| uri.endsWith("CreateCar.jsp") || uri
 								.endsWith("EditCar.jsp"))) {
-				System.out.println("hi");
+				// System.out.println("hi");
 				this.context.log("Unauthorized access request");
 				String message = "Unauthorized access request,Please Login first";
 				request.setAttribute("message", message);

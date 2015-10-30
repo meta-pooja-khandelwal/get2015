@@ -1,6 +1,6 @@
 /**
  * @author Pooja Khandelwal
- * @created date 27/10/2015
+ * @created date 29/10/2015
  * @name VehicleController
  * @description It will call whenever admin wants to log out it will invalidate the session on log out request and forward the request to Vehicle.jsp page
  */

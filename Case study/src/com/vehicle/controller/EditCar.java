@@ -1,21 +1,22 @@
 /**
  * @author Pooja Khandelwal
- * @created date 27/10/2015
+ * @created date 29/10/2015
  * @name EditCar
  * @description It will call the method in VehicleFacade to edit the data for a specified car
  */
 package com.vehicle.controller;
 
 import java.io.IOException;
-import java.sql.Connection;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.vehicle.VehicleType;
 import com.vehicle.exception.VehicleSystemException;
-import com.vehicle.facade.VehicleFacade;
+import com.vehicle.factory.VehicleFactory;
 import com.vehicle.model.Car;
+import com.vehicle.model.Vehicle;
 import com.vehicle.service.VehicleService;
 
 /**
@@ -69,37 +70,37 @@ public class EditCar extends HttpServlet {
 		String imagePath = request.getParameter("imagePath");
 		String carIdString = request.getParameter("carId");
 		int carId = Integer.parseInt(carIdString);
-		Car vehicle = new Car();
-		vehicle.setMake(make);
-		vehicle.setModel(model);
-		vehicle.setEngineInCc(engineInCc);
-		vehicle.setFuelCapacity(fuelCapacity);
-		vehicle.setMileage(mileage);
-		vehicle.setRoadTax(roadTax);
-		vehicle.setOnRoadPrice(onRoadPrice);
-		vehicle.setShowRoomPrice(showRoomPrice);
-		vehicle.setCreatedTime(createdTime);
-		vehicle.setCreatedBy(createdBy);
-		vehicle.setImagePath(imagePath);
-		vehicle.setVehicleId(carId);
+		VehicleFactory vehicleFactory = VehicleFactory.getInstance();
+		Vehicle iVehicle = vehicleFactory.getVehicle(VehicleType.car);
+		Car car = (Car) iVehicle;
+		car.setMake(make);
+		car.setModel(model);
+		car.setEngineInCc(engineInCc);
+		car.setFuelCapacity(fuelCapacity);
+		car.setMileage(mileage);
+		car.setRoadTax(roadTax);
+		car.setOnRoadPrice(onRoadPrice);
+		car.setShowRoomPrice(showRoomPrice);
+		car.setCreatedTime(createdTime);
+		car.setCreatedBy(createdBy);
+		car.setImagePath(imagePath);
+		car.setVehicleId(carId);
 
-		vehicle.setCarId(carId);
-		vehicle.setAc(ac);
-		vehicle.setAccessorykit(accessorykit);
-		vehicle.setPowerSteering(powerSteering);
-		request.setAttribute("car", vehicle);
+		car.setCarId(carId);
+		car.setAc(ac);
+		car.setAccessorykit(accessorykit);
+		car.setPowerSteering(powerSteering);
+		request.setAttribute("car", car);
 		VehicleService iService = VehicleService.getInstance();
-		Connection connection = null;
-		VehicleFacade vehicleFacade;
+		/*
+		 * Connection connection = null; VehicleFacade vehicleFacade; try {
+		 * connection = iService.getConnetion(); } catch (VehicleSystemException
+		 * e) {
+		 * System.out.println("Coult not create connection with database, [" +
+		 * e.getMessage() + "]"); } vehicleFacade = VehicleFacade.getInstance();
+		 */
 		try {
-			connection = iService.getConnetion();
-		} catch (VehicleSystemException e) {
-			System.out.println("Coult not create connection with database, ["
-					+ e.getMessage() + "]");
-		}
-		vehicleFacade = VehicleFacade.getInstance();
-		try {
-			vehicleFacade.editCar(vehicle, connection);
+			iService.editCar(car);
 			String message = "Car edited successfully";
 			request.setAttribute("message", message);
 			request.getRequestDispatcher("./view/Specification.jsp").forward(
@@ -111,8 +112,6 @@ public class EditCar extends HttpServlet {
 			request.setAttribute("message", message);
 			request.getRequestDispatcher("./view/EditCar.jsp").forward(request,
 					response);
-		} finally {
-			iService.closeConnetion(connection);
 		}
 	}
 
