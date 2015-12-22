@@ -6,7 +6,7 @@ public class Demo {
 		int j=i;//un boxing(it works as i=2)
                 //(it will call function Integer.intValue(2) method to convert Integer to int)
 		System.out.println("j = "+j);
-		int i1 = 4;//Premetive data type
+		int i1 = 4;//Primitive data type
 		System.out.println("input i and i1 = " + i + " and " + i1);
 		changeInteger(i, i1);//here the value of i1 and the reference value of i will be passed but
 		                    //since the Integer is immutable so it won't update the value of original variable 
@@ -17,7 +17,7 @@ public class Demo {
 		i = 5; //auto boxing(it works as i=new Integer(2)),so new memory will be created and
 		        //it will not reflect in the original variable
 		       //(it will call function Integer.valueOf(2) method to convert int to Integer)
-		i1 = 5;//Premetive data type,
+		i1 = 5;//Primitive data type,
 		       //it will not reflect in the original variable
 		System.out.println("1.)output i and i1 = " + i + " and " + i1);
 	}
