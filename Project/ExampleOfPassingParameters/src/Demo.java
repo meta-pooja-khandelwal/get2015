@@ -42,7 +42,7 @@ public class Demo {
 		                                                         //not on other)
 
 		
-		//same concept will be applied for all permeative and non permeative  data types
+		//same concept will be applied for all primitive and non primitive  data types
 	}
 
 	private static void changeUserName1(DemoModel obj) {
