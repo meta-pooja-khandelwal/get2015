@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.metasocio.model.usermanagement.User" table="user">
+		<id column="user_id" name="userId" type="int">
+			<generator class="native" />
+		</id>
+		<property column="name" name="name" type="string" />
+		<property column="email_id" name="email" type="string"
+			unique="true" />
+		<property column="address" name="address" type="string" />
+		<property column="phone_No" name="phoneNo" type="string" />
+		<property column="city" name="city" type="string" />
+		<property column="department" name="department" type="string" />
+		<property column="role" name="role" type="string" />
+		<property column="college" name="college" type="string" />
+		<property column="course" name="course" type="string" />
+		<property column="highSchool" name="highSchool" type="string" />
+		<property column="stream" name="stream" type="string" />
+		<property column="dateOfBirth" name="dateOfBirth" type="string" />
+		<property column="gender" name="gender" type="string" />
+		<property column="image_url" name="picture" type="string" />
+		<property column="about" name="about" type="string" />
+		<property column="nickName" name="nickName" type="string" />
+		<property column="relationshipStatus" name="relationshipStatus"
+			type="string" />
+		<property column="created_at" name="createdAt" type="timestamp" />
+		<property column="updated_at" name="updatedAt" type="timestamp" />
+		<property column="created_by" name="createdBy" type="string" />
+		<property column="isdelete" name="isDelete" type="int" />
+		<set name="users" table="followers_followings" cascade="persist"
+			lazy="false" inverse="false">
+			<key column="follower_id" />
+			<many-to-many column="following_id"
+				class="com.metasocio.model.usermanagement.User" fetch="join" />
+		</set>
+
+		<set name="groupsSet" table="user_group" cascade="persist" lazy="false"
+			inverse="false">
+			<key column="user_id" />
+			<many-to-many column="group_id"
+				class="com.metasocio.model.groupmanagement.Group" fetch="join" />
+		</set>
+	</class>
+</hibernate-mapping>

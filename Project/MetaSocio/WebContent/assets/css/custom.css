@@ -1,0 +1,27 @@
+.btn-small {
+padding-top : 5px;
+padding-bottom : 5px;
+height : 25px;
+border: none;
+}
+
+.padding-small {
+padding : 10px;
+}
+
+.padding-smallComment {
+padding-top: 25px;
+}
+.rounded-corner {
+border-radius : 10px;
+}
+.btn-small:hover,
+.btn-small:focus
+{
+background: #f05a28;
+}
+.btn-outline-dark:focus,
+.btn-outline-dark:hover
+{
+background: #f05a28;
+}

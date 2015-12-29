@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.metasocio.model.postmanagement.Post" table="post">
+		<id column="post_id" name="postId" type="int">
+			<generator class="native" />
+		</id>
+		<property column="post_details" name="postDetails" type="string" />
+		<property column="group_id" name="groupId" type="int" />
+		<property column="date_posted" name="datePosted" type="timestamp" />
+		<property column="likes" name="likes" type="int" />
+		<property column="updated_at" name="updatedAt" type="timestamp" />
+		<property column="created_by" name="createdBy" type="string" />
+		<property column="isdelete" name="isDelete" type="int" />
+		<many-to-one name="user" column="user_id_who_posted"
+			unique="false" fetch="join" class="com.metasocio.model.usermanagement.User" />
+	</class>
+</hibernate-mapping>

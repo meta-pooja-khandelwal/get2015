@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+  "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.metasocio.model.likemanagement.Like" table="likes">
+		<id column="counter" name="counter" type="int">
+			<generator class="native" />
+		</id>
+		<property column="post_id" name="postId" type="int" />
+		<property column="liker_id" name="likerId" type="int" />
+		<property column="created_at" name="createdAt" type="timestamp" />
+		<property column="updated_at" name="updatedAt" type="timestamp" />
+		<property column="created_by" name="createdBy" type="string" />
+		<property column="isliked" name="isLiked" type="int" />
+	</class>
+</hibernate-mapping>
